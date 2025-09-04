@@ -1,0 +1,45 @@
+.logo{
+    width: 50%;
+    padding-top: 15px;
+}
+#itemContainer{
+    padding: 5px;
+    /*
+    flex: 1 1 250px; /*added from GPT to grow, shrink, and set the minimum width*/
+    /*max-width: 350px;
+    */
+}
+#itemImage{
+    width: 100%;
+    max-width: 200px;
+    border: 1px solid;
+    border-radius: 20px;
+}
+.detailOption{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+.detailOption p{
+    border: 1px solid #ffff;
+    background-color: #ffff;
+}
+.detailOption select{
+    background-color: green;
+}
+.detailOption option{
+    background-color: yellow;
+}
+@media only screen and (min-width:850px) {
+    #mainContent{
+        width: 80%;
+        margin: 0 auto;
+        text-align: center;
+    }
+    footer{
+        width: 100%;
+        margin: 0;
+    }
+}
