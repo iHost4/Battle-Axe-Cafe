@@ -9,7 +9,7 @@ function Main(){
     return(
         <div id="mainContent">
             {/*<h1>Welcome to Battle Axe Cafe</h1>*/}
-            <img className='logo' src='/Images/BattleAxeCafeLogo.jpg'></img>
+            <img className='logo' src='/IMAGES/BattleAxeCafeLogo.jpg'></img>
             <hr />
             <br />
             {/*START OF FORM*/}
@@ -34,25 +34,25 @@ function Main(){
                 <h4>Select Your Meal(s)</h4>
                 <div className='meals'>
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
                         desc={"Hello world"}
                         options={['0','1','2','3']}
                     />
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
                         desc={"Hello world"}
                         options={['0','1','2','3']}
                     />
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
                         desc={"Hello world"}
                         options={['0','1','2','3']}
                     />
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
                         desc={"Hello world"}
                         options={['0','1','2','3']}
