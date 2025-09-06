@@ -25,9 +25,14 @@
 .detailOption p{
     border: 1px solid #ffff;
     background-color: #ffff;
+    border-radius: 5px;
+    padding-right: 10px;
 }
 .detailOption select{
-    background-color: green;
+    border: 1px;
+    background-color: #fff;
+    height: 23px;
+    border-radius: 5px;
 }
 .detailOption option{
     background-color: yellow;

@@ -9,7 +9,7 @@ function Main(){
     return(
         <div id="mainContent">
             {/*<h1>Welcome to Battle Axe Cafe</h1>*/}
-            <img className='logo' src='/Images/BattleAxeCafeLogo.jpg'></img>
+            <img className='logo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
             <hr />
             <br />
             {/*START OF FORM*/}
@@ -24,37 +24,34 @@ function Main(){
                 </select>
                 <br/>
                 <br/>
-                <br/>
                 <label for="name">Enter your full name:</label><br/>
                 <input type ="text" placeholder='First and last name'></input>
-            
-                <br/>
                 <br/>
                 {/*Meals*/}
                 <h4>Select Your Meal(s)</h4>
                 <div className='meals'>
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Hello world"}
+                        desc={"Food item 1"}
                         options={['0','1','2','3']}
                     />
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Hello world"}
+                        desc={"Food item 2"}
                         options={['0','1','2','3']}
                     />
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Hello world"}
+                        desc={"Food item 3"}
                         options={['0','1','2','3']}
                     />
                     <Items 
-                        image={"/Images/bowl.jpg"}
+                        image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Hello world"}
+                        desc={"Food item 4"}
                         options={['0','1','2','3']}
                     />
                 </div>
