@@ -16,6 +16,8 @@ function Main(){
             <form id='userForm'>
                 <label for="genderRank">Rank (or select Sister):</label><br/>
                 <select id="genderRank" name="genderRank">
+                    <option value="Officer 50">Officer 80</option>
+                    <option value="Officer 50">Officer 50</option>
                     <option value="Officer 20">Officer 20</option>
                     <option value="Officer 10">Officer 10</option>
                     <option value="Soldier">Soldier</option>
@@ -33,26 +35,30 @@ function Main(){
                     <Items 
                         image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Food item 1"}
-                        options={['0','1','2','3']}
+                        order_name={"Food item 1"}
+                        price={'$14'}
+                        quantity={['0','1','2','3']}
                     />
                     <Items 
                         image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Food item 2"}
-                        options={['0','1','2','3']}
+                        order_name={"Food item 2"}
+                        price={'$14'}
+                        quantity={['0','1','2','3']}
                     />
                     <Items 
                         image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Food item 3"}
-                        options={['0','1','2','3']}
+                        order_name={"Food item 3"}
+                        price={'$14'}
+                        quantity={['0','1','2','3']}
                     />
                     <Items 
                         image={"/IMAGES/bowl.jpg"}
                         imageAlt={''}
-                        desc={"Food item 4"}
-                        options={['0','1','2','3']}
+                        order_name={"Food item 4"}
+                        price={'$14'}
+                        quantity={['0','1','2','3']}
                     />
                 </div>
                 <input type="submit" value="Place Order" />

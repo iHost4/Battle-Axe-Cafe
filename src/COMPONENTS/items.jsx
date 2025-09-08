@@ -4,14 +4,15 @@ import '../CSS/items.css'
         2. Description
         3. Quantity 
         */
-function Items({image, imageAlt, desc, options=[]}){
+function Items({image, imageAlt, order_name, price, quantity=[]}){
     return(
         <div id="itemContainer">
             <img id="itemImage" src={image} alt={imageAlt}></img>
             <div className='detailOption'>
-                <p>{desc}</p>
+                <p>{order_name}</p>
+                <p>{price}</p>
                 <select>
-                    {options.map((opt, i) =>(
+                    {quantity.map((opt, i) =>(
                         <option key={i} value={opt}>
                             {opt}
                         </option>
