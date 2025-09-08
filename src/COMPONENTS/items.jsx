@@ -4,14 +4,14 @@ import '../CSS/items.css'
         2. Description
         3. Quantity 
         */
-function Items({image, imageAlt, order_name, price, quantity=[]}){
+function Items({image, imageAlt, order_name, price, quantity=[], onChange}){
     return(
         <div id="itemContainer">
             <img id="itemImage" src={image} alt={imageAlt}></img>
             <div className='detailOption'>
                 <p>{order_name}</p>
                 <p>{price}</p>
-                <select>
+                <select onChange={(e) => onChange(order_name, e.target.value, price)}>
                     {quantity.map((opt, i) =>(
                         <option key={i} value={opt}>
                             {opt}

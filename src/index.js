@@ -5,11 +5,12 @@ import reportWebVitals from './reportWebVitals';
 /*COMPONENTS THAT i CREATED*/
 import Main from './main';
 import Footer from './COMPONENTS/footer.jsx';
-import Items from './COMPONENTS/items.jsx';
+import OrderSubmitted from './COMPONENTS/ordersubmitted.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <OrderSubmitted />
     <Main />
     <Footer />
   </React.StrictMode>
