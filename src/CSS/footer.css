@@ -7,3 +7,10 @@ footer{
     background-color: black;
     color: white;
 }
+.allergyWarning{
+    color: red;
+}
+.allergyWarning hr{
+    border: 2px dotted;
+    color: white;
+}

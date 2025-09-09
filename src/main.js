@@ -55,37 +55,73 @@ function Main(){
 
             if(customerError) throw customerError
             const customer_id = customerData[0].customer_id
+
+            //insert order ONCE
+            const { data: orderData, error: orderError } = await supabase
+                .from('order')
+                .insert([{customer_id}]) //adds the customer_id to the database
+                .select('order_no')
+
+                if(orderError) throw orderError;
+                const order_no = orderData[0].order_no
+
+                //insert the items with the same order_no
+                const itemPayload = orders.map(order => ({
+                    order_no,
+                    order_name: order.order_name,
+                    quantity: order.quantity,
+                    price: order.price
+                }));
             //insert the order to DB
+            /*
             const orderPayload = orders.map(order => ({
                 customer_id,
                 order_name: order.order_name,
                 quantity: order.quantity,
                 price: order.price
             }))
-
+            
             const { data:orderData, error: orderError } = await supabase
             .from('order')
             .insert(orderPayload)
             .select('order_no')//returns the order_no upon submission
-
-            if(orderError) throw orderError
+            */
+           //new line for items
+           const { error: itemError } = await supabase
+                .from('items')
+                .insert(itemPayload)
+                console.log("item payload", itemPayload)
+            
+            if(orderError) throw itemError
+            //if(orderError) throw orderError
             //grabs the first order_no
-            setSubmittedOrderNo(orderData[0].order_no)
+            //setSubmittedOrderNo(orderData[0].order_no)
+            setSubmittedOrderNo(order_no);//this line is new for making items have the same order_no
             setShowPopup(true)
-
             console.log("Order placed successfully!")
         } catch(err){
             console.error('Database Error from Supabase: ', err)
         }
+        //display the display order button
+        const showOrderNoButton = document.querySelector('.showOrderNoButton')
+        showOrderNoButton.style.position="absolute"
+        showOrderNoButton.style.left='0'
+        showOrderNoButton.style.right='0'
+        showOrderNoButton.width="80%"
+        showOrderNoButton.style.display="flex"
+        showOrderNoButton.style.justifyContent="center"
+
+
     }
     //END OF: FORM SUBMISSION HANDLING
-    useEffect(() =>{
+    /*useEffect(() =>{
         const showOrderNoButton = document.querySelector('.showOrderNoButton');
-        showOrderNoButton.style.display='none'
+        //showOrderNoButton.style.display='none'
         if(showPopup === true){
             showOrderNoButton.style.display='block'
         }
     }, []);
+    */
     return(
         <div id="mainContent">
             <img className='logo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
@@ -154,7 +190,11 @@ function Main(){
                 </div>
                 <input type="submit" value="Place Order" />
             </form>
+            <br />
+            <br />
             <button className='showOrderNoButton' onClick={() =>setShowPopup(true)}>DISPLAY MY ORDER# </button>   
+            <br />
+            <br />
             {showPopup && (
                 <OrderSubmitted 
                 orderNo={submittedOrderNo} 

@@ -28,5 +28,12 @@ img.logo{ /*element.clssName*/
     justify-content: center;
     gap: 1rem;
     padding: 1rem;
-
+}
+.showOrderNoButton{
+    display: none;
+    border: 1px;
+    background-color: #5A2917;
+    color: white;
+    height: 25px;
+    align-items: center;
 }
