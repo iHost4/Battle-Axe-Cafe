@@ -37,3 +37,15 @@ img.logo{ /*element.clssName*/
     height: 25px;
     align-items: center;
 }
+.headOfKitchenLink{
+    border: 1px solid orange;
+    background-color: orange;
+    color: red;
+    font-size: large;
+    padding: 10px;
+}
+.headOfKitchenLink:hover{
+    border: 1px solid red;
+    background-color: red;
+    color: white;
+}

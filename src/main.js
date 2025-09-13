@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { supabase } from './API/supabaseClient';
 import OrderSubmitted from './COMPONENTS/ordersubmitted';
 import { useEffect } from 'react';
-
+//import { useNavigate } from 'react-router-dom';
+//IMPORTANT: YOU MUST CALCULATE THE ORDER TOTAL ON THE POP-UP FOR THOSE PAYING IN CASH
+//THE ORDERS DATABASE MUST SHOW THE TOTAL...IT WILL CALCULATE THE ITEM PRICE * QUANTITY
 function Main(){
     /*const [showRank, setShowRank] = useState(false);
     const rank =["Officer20","Officer10","Soldier","Sister"]
@@ -17,6 +19,7 @@ function Main(){
 
     const [showPopup, setShowPopup] = useState(false)
     const [submittedOrderNo, setSubmittedOrderNo] = useState(null)//handles fetching the submitted order numbers
+    const [viewAllOrders, setViewAllOrders] = useState();
 
     useEffect(() =>{
         if(showPopup){
@@ -122,9 +125,11 @@ function Main(){
         }
     }, []);
     */
+   // const navigate = useNavigate();
     return(
         <div id="mainContent">
             <img className='logo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
+            <br />
             <hr />
             <br />
             {/*START OF FORM*/}
