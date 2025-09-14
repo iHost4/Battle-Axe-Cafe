@@ -69,7 +69,7 @@ function Main(){
             mustSelect.style.margin="auto"
             mustSelect.style.top="50%"
             */
-            alert("Please select at lease one item to order");
+            alert("Please select at least one item to order");
             return;
         }
 
