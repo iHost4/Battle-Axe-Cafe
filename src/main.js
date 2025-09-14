@@ -12,7 +12,7 @@ function Main(){
     const rank =["Officer20","Officer10","Soldier","Sister"]
     */
    
-    //THE FOLLOWING CODE INPUTS THE USER INFORMATION INSIDE SUPABASE//
+    //THE FOLLOWING useState INPUTS THE USER INFORMATION INSIDE SUPABASE//
     const [rank, setRank] = useState('Officer 80')//
     const [name, setName] = useState('')
     const [orders, setOrders] = useState([]) //gets all the orders
@@ -20,6 +20,8 @@ function Main(){
     const [showPopup, setShowPopup] = useState(false)
     const [submittedOrderNo, setSubmittedOrderNo] = useState(null)//handles fetching the submitted order numbers
     const [viewAllOrders, setViewAllOrders] = useState();
+    //THE FOLLOWING useState ENSURES AT LEAST ONE ITEM HAS A QUANTITY GREATER THAN 0
+    const [orderSelections, setOrderSelections] = useState({})
 
     useEffect(() =>{
         if(showPopup){
@@ -32,6 +34,7 @@ function Main(){
         }
     }, [showPopup])
     //READ AND UNDERSTAND THE CODE BELOW
+    //THE FOLLOWING CODE ENSURES AT LEAST ONE ITEM HAS A QUANTITY GREATER THAN 0
     const handleOrderChange = (order_name, quantity, price) => {
         setOrders(prev => {
             const updated = prev.filter(item => item.order_name != order_name)
@@ -44,10 +47,31 @@ function Main(){
             }
             return updated
         })
-    }
+        //THE FOLLOWING CODE ENSURES AT LEAST ONE ITEM HAS A QUANTITY GREATER THAN 0
+        setOrderSelections(prev => ({
+            ...prev,
+            [order_name]: { quantity, price }
+        }));
+    };
     //START OF: FORM SUBMISSION HANDLING
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        //THE FOLLOWING CODE ENSURES AT LEAST ONE ITEM HAS A QUANTITY GREATER THAN 0
+        const atleastOneSelection = Object.values(orderSelections).some(
+            item => parseInt(item.quantity) > 0
+        );
+        if(!atleastOneSelection){
+            /*
+            const mustSelect = document.querySelector('.selectAnItem')
+            mustSelect.style.display="block"
+            mustSelect.style.position="absolute"
+            mustSelect.style.margin="auto"
+            mustSelect.style.top="50%"
+            */
+            alert("Please select at lease one item to order");
+            return;
+        }
 
         try{
             //insert the customer to DB
@@ -76,19 +100,6 @@ function Main(){
                     price: order.price
                 }));
             //insert the order to DB
-            /*
-            const orderPayload = orders.map(order => ({
-                customer_id,
-                order_name: order.order_name,
-                quantity: order.quantity,
-                price: order.price
-            }))
-            
-            const { data:orderData, error: orderError } = await supabase
-            .from('order')
-            .insert(orderPayload)
-            .select('order_no')//returns the order_no upon submission
-            */
            //new line for items
            const { error: itemError } = await supabase
                 .from('items')
@@ -113,8 +124,6 @@ function Main(){
         showOrderNoButton.width="80%"
         showOrderNoButton.style.display="flex"
         showOrderNoButton.style.justifyContent="center"
-
-
     }
     //END OF: FORM SUBMISSION HANDLING
     /*useEffect(() =>{
@@ -128,6 +137,10 @@ function Main(){
    // const navigate = useNavigate();
     return(
         <div id="mainContent">
+            {/*THE BOX THAT WILL ALERT THE USER TO SELECT AT LEAST ONE ITEM*/}
+            <div className='selectAnItem'>
+                <p>PLEASE SELECT AT LEAST ONE ITEM TO ORDER</p>
+            </div>
             <img className='logo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
             <br />
             <hr />
