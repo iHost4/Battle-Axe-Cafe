@@ -1,5 +1,13 @@
 import '../CSS/footer.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { useNavigate } from 'react-router-dom';
+
 function Footer() {
+    const navigate = useNavigate();
+    const handleRedirect = () => {
+        navigate('/hok')
+    }
     return(
         <footer>
             <span className='allergyWarning'>ALLERGIES: Please be mindful of your allergies. 
@@ -11,6 +19,7 @@ function Footer() {
                 <br />
                 <hr />
             </span>
+            <button className='hokButton' onClick={handleRedirect}>HEAD OF KITCHEN</button>
             <p>Created and Hosted by Code-de-Sac, LLC. &copy; 2025 </p>
             <p>ALL RIGHTS RESERVED</p>
         </footer>

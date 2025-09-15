@@ -1,104 +1,135 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "./API/supabaseClient";
+import { supabase } from "../API/supabaseClient";
+import '../CSS/hok.css'
 
 function HeadOfKitchen() {
-  const [orders, setOrders] = useState([]);          // list of all orders
-  const [selectedOrderNo, setSelectedOrderNo] = useState(null); // selected order number
-  const [items, setItems] = useState([]);            // items belonging to the selected order
-  const [loading, setLoading] = useState(false);
+    //check for password
+    const [formVisible, setFormVisible] = useState(true)
+    //FETCHING FROM DATABASE
+    const [orders, setOrders] = useState([]);
+    const [expandedOrders, setExpandedOrders] = useState({});
+    const[itemsByOrder, setItemsByOrder] = useState({});
 
-  // Fetch all orders on mount
-  useEffect(() => {
-    const fetchOrders = async () => {
-      let { data, error } = await supabase
+    //CHECKS IF THE HOK PASSWORD IS SET
+    useEffect(() =>{
+      const storedHokPassword = sessionStorage.getItem('hokPassword');
+      if(storedHokPassword === 'h4h'){
+        setFormVisible(false)
+        fetchOrders()//FETCH THE ORDERS if PASSWORD CREDENTIALS IS MET
+      }
+    }, []);
+    //END CHECKS IF THE HOK PASSWPRD IS SET
+    //START FETCHORDER
+    const fetchOrders = async (e) =>{
+      const { data, error } = await supabase
         .from("order")
-        .select("order_no");
+        .select("order_no, customer_id, customer(name)")
 
-      if (error) {
-        console.error("Error fetching orders:", error);
-      } else {
-        setOrders(data);
+      if(error){
+        console.error("Error fetching orders:", error.message)
+      }else{
+        setOrders(data || [])
       }
     };
+    //END FETCHORDER
 
-    fetchOrders();
-  }, []);
+    //VALIDATES HOK PASSWORD BEFORE ALLOWING FORM VIEW
+    const handleSubmit = (e) => {
+      e.preventDefault(); // prevent page reload
+      const hokPassword = e.target.hokPassword.value;
 
-  // Fetch items for a given order
-  const fetchItemsForOrder = async (orderNo) => {
-    setSelectedOrderNo(orderNo);
-    setLoading(true);
+      if (hokPassword === 'h4h') {    //store user session
+        sessionStorage.setItem('hokPassword', hokPassword);
+        setFormVisible(false)
+        fetchOrders();
+      } else {
+        alert("incorrect password")
+      }
+    };
+    //END VALIDATE HOK PASSWORD BEFORE ALLOWING FORM VIEW
 
-    let { data, error } = await supabase
-      .from("items")
-      .select("*")
-      .eq("order_no", orderNo);
+    //TOGGLE ORDER EXPANSION AND FETCH ITEMS IF NOT ALREADY LOADED
+    const toggleItems = async (orderNo) => {
+      const isExpanded = expandedOrders[orderNo];
+      
+      if(isExpanded){
+        //collapse
+        setExpandedOrders((prev) => ({...prev, [orderNo]: false}));
+      }else{
+        //expand
+        if(!itemsByOrder[orderNo]){
+          const { data, error } = await supabase
+            .from("items")
+            .select("*")
+            .eq("order_no", orderNo);
 
-    if (error) {
-      console.error("Error fetching items:", error);
-    } else {
-      setItems(data);
-    }
+            if(error){
+              console.error("Error fetching items:", error.message);
+            }else{
+              setItemsByOrder((prev) => ({...prev, [orderNo]: data}));
+            }
+        }
+        setExpandedOrders((prev) => ({...prev, [orderNo]: true}));
+      }
+    };
+  return(
+    <>
+      <img className='logo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
 
-    setLoading(false);
-  };
-
-  return (
-    <div id="viewAllOrders">
-      <h2>Head of Kitchen - All Orders</h2>
-
-      {/* Table of orders */}
-      <table border="1" style={{ width: "100%", marginBottom: "20px" }}>
-        <thead>
-          <tr>
-            <th>Order Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.order_no}>
-              <td>
-                <button onClick={() => fetchItemsForOrder(order.order_no)}>
-                  {order.order_no}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Items for the selected order */}
-      {selectedOrderNo && (
-        <div>
-          <h3>Items for Order #{selectedOrderNo}</h3>
-          {loading ? (
-            <p>Loading items...</p>
-          ) : items.length > 0 ? (
-            <table border="1" style={{ width: "100%" }}>
-              <thead>
-                <tr>
-                  <th>Item Name</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.item_id}>
-                    <td>{item.order_name}</td>
-                    <td>{item.quantity}</td>
-                    <td>${item.price}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No items for this order.</p>
-          )}
-        </div>
+      {formVisible && (
+        <form name="hokForm" className="hokForm" onSubmit={handleSubmit}>
+          <h2>PLEASE ENTER THE PASSWORD</h2>
+          <input className="hokPassword" type="text" name="hokPassword"/>
+          <button>View Orders</button>
+        </form>
       )}
-    </div>
-  );
+      {!formVisible && (
+      <div id="viewOrder">
+        <h3>HELLO HEAD OF KITCHEN</h3>
+        <table className="orderTable">
+          <thead>
+            <tr>
+              <th>ORDER_NO</th>
+              <th>NAME</th>
+              <th>VIEW ITEMS ORDERED</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) =>(
+              <React.Fragment key={order.order_no}>
+                <tr>
+                  <td>{order.order_no}</td>
+                  <td>{order.customer?.name || "Unknown"}</td>
+                  <td>
+                    <button onClick={() => toggleItems(order.order_no)}>
+                      {expandedOrders[order.order_no]
+                        ? "HIDE ITEMS"
+                        : "VIEW ITEMS IN THIS ORDER"
+                      }
+                    </button>
+                  </td>
+                </tr>
+                {expandedOrders[order.order_no] && (
+                  <tr>
+                    <td colSpan={3}>
+                      <ul>
+                        {itemsByOrder[order.order_no]?.map((item, idx) => (
+                          <li key={idx}>
+                            {item.order_name} - Qty: {item.quantity}
+                          </li>
+                        )) || <li>Loading...</li>}
+                      </ul>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      )}
+    </>
+  )
 }
 
 export default HeadOfKitchen;

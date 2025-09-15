@@ -62,13 +62,6 @@ function Main(){
             item => parseInt(item.quantity) > 0
         );
         if(!atleastOneSelection){
-            /*
-            const mustSelect = document.querySelector('.selectAnItem')
-            mustSelect.style.display="block"
-            mustSelect.style.position="absolute"
-            mustSelect.style.margin="auto"
-            mustSelect.style.top="50%"
-            */
             alert("Please select at least one item to order");
             return;
         }
@@ -126,14 +119,6 @@ function Main(){
         showOrderNoButton.style.justifyContent="center"
     }
     //END OF: FORM SUBMISSION HANDLING
-    /*useEffect(() =>{
-        const showOrderNoButton = document.querySelector('.showOrderNoButton');
-        //showOrderNoButton.style.display='none'
-        if(showPopup === true){
-            showOrderNoButton.style.display='block'
-        }
-    }, []);
-    */
    // const navigate = useNavigate();
     return(
         <div id="mainContent">
