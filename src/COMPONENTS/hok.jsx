@@ -84,14 +84,14 @@ function HeadOfKitchen() {
         </form>
       )}
       {!formVisible && (
-      <div id="viewOrder">
+      <div id="viewOrder"> 
         <h3>HELLO HEAD OF KITCHEN</h3>
         <table className="orderTable">
           <thead>
             <tr>
-              <th>ORDER_NO</th>
+              <th>ORDER#</th>
               <th>NAME</th>
-              <th>VIEW ITEMS ORDERED</th>
+              <th>VIEW ITEMS</th>
             </tr>
           </thead>
           <tbody>
@@ -101,7 +101,7 @@ function HeadOfKitchen() {
                   <td>{order.order_no}</td>
                   <td>{order.customer?.name || "Unknown"}</td>
                   <td>
-                    <button onClick={() => toggleItems(order.order_no)}>
+                    <button className="viewOrdersButton" onClick={() => toggleItems(order.order_no)}>
                       {expandedOrders[order.order_no]
                         ? "HIDE ITEMS"
                         : "VIEW ITEMS IN THIS ORDER"
@@ -114,11 +114,16 @@ function HeadOfKitchen() {
                     <td colSpan={3}>
                       <ul>
                         {itemsByOrder[order.order_no]?.map((item, idx) => (
-                          <li key={idx}>
-                            {item.order_name} - Qty: {item.quantity}
+                          <li className="item" key={idx}>
+                            {item.order_name} - Qty: {item.quantity} Price: ${item.price * item.quantity}
                           </li>
                         )) || <li>Loading...</li>}
                       </ul>
+                        Total: $
+                        {
+                          itemsByOrder[order.order_no]
+                          ?.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+                        }
                     </td>
                   </tr>
                 )}
