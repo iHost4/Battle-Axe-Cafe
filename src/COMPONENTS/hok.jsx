@@ -24,6 +24,7 @@ function HeadOfKitchen() {
       const { data, error } = await supabase
         .from("order")
         .select("order_no, customer_id, customer(name)")
+        //.gt("order_date", "2025-09-15")
 
       if(error){
         console.error("Error fetching orders:", error.message)
@@ -74,8 +75,8 @@ function HeadOfKitchen() {
     };
   return(
     <>
-      <img className='logo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
-
+      <img className='hoklogo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
+     <hr className="hr" />
       {formVisible && (
         <form name="hokForm" className="hokForm" onSubmit={handleSubmit}>
           <h2>PLEASE ENTER THE PASSWORD</h2>
@@ -85,7 +86,7 @@ function HeadOfKitchen() {
       )}
       {!formVisible && (
       <div id="viewOrder"> 
-        <h3>HELLO HEAD OF KITCHEN</h3>
+        <h3>THIS WEEKS ORDERS</h3>
         <table className="orderTable">
           <thead>
             <tr>

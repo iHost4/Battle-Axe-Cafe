@@ -58,3 +58,13 @@ img.logo{ /*element.clssName*/
     background-color: red;
     color: white;
 }
+.allergyWarning{
+    border: 1px solid white;
+    background-color: white;
+    color: red;
+}
+@media screen and (max-width:840px) {
+    hr{
+        display: none;
+    }
+}

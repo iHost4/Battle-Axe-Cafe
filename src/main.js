@@ -153,10 +153,17 @@ function Main(){
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
-
+                
                 <br/>
                 {/*Meals*/}
                 <h4>Select Your Meal&#40;s&#41;</h4>
+                <span className='allergyWarning'>
+                    <strong>ALLERGIES: Please let the kitchen team know of any allergies that you may have to prevent issues.</strong>
+                    <br />
+                    <strong>INQUIRE OF THE INGREDIENTS</strong>
+                </span>
+                <br />
+                <br />
                 <div className='meals'>
                     <Items 
                         image={"/IMAGES/bowl.jpg"}
@@ -196,8 +203,7 @@ function Main(){
             <br />
             <br />
             <button className='showOrderNoButton' onClick={() =>setShowPopup(true)}>DISPLAY MY ORDER# </button>   
-            <br />
-            <br />
+
             {showPopup && (
                 <OrderSubmitted 
                 orderNo={submittedOrderNo} 
