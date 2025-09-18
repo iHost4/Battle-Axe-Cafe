@@ -9,7 +9,7 @@ function HeadOfKitchen() {
     const [orders, setOrders] = useState([]);
     const [expandedOrders, setExpandedOrders] = useState({});
     const[itemsByOrder, setItemsByOrder] = useState({});
-
+    const [paidPaypal, setPaidPaypal] = useState ({}) //check if user paid with PayPal
     //CHECKS IF THE HOK PASSWORD IS SET
     useEffect(() =>{
       const storedHokPassword = sessionStorage.getItem('hokPassword');
@@ -70,9 +70,51 @@ function HeadOfKitchen() {
               setItemsByOrder((prev) => ({...prev, [orderNo]: data}));
             }
         }
+        //CHECK IF PAID WITH PAYPAL
+        if(!(orderNo in paidPaypal)){
+          const { data,error } = await supabase
+            .from('order')
+            .select('*')
+            .eq('order_no' , orderNo)
+            .not('paid_with_paypal' , 'is', null)
+ 
+          if(error){
+            console.log('Cannot verify PayPal payment for ${orderNo} ', error.message)
+          }else{
+            setPaidPaypal((prev) => ({...prev, [orderNo]: data && data.length > 0}))
+          }
+        }
         setExpandedOrders((prev) => ({...prev, [orderNo]: true}));
       }
     };
+    //CHECKS IF PAID WITH PAYPAL
+    /*
+    const payPalRow = ({order}) =>{
+      const seeIfPaid = async (orderNo) =>{
+        if(!paidPaypal[orderNo]){
+          const { data,error } = await supabase
+          .from('order')
+          .select('*')
+          .eq('order_no' , orderNo)
+          .not('paid_with_paypal' , 'is', null)
+
+          if(error){
+            console.log("Cannot verify PayPal payment: ", error.message)
+          }
+          if(data && data.length > 0){
+            setPaidPaypal((prev) => ({...prev, [orderNo]: true}))
+          }else{
+            setPaidPaypal((prev) => ({...prev, [orderNo]: false}))
+          }
+        }
+      };
+      useEffect(() =>{
+        if(order?.order_no){
+          seeIfPaid(order.order_no)
+        }
+      },[order?.order_no])
+    }
+    */
   return(
     <>
       <img className='hoklogo' src='/IMAGES/BattleAxeCafeLogo.png'></img>
@@ -98,11 +140,11 @@ function HeadOfKitchen() {
           <tbody>
             {orders.map((order) =>(
               <React.Fragment key={order.order_no}>
-                <tr>
+                <tr style={{ color: paidPaypal[order.order_no] ? 'green' : 'black' }}>
                   <td>{order.order_no}</td>
                   <td>{order.customer?.name || "Unknown"}</td>
                   <td>
-                    <button className="viewOrdersButton" onClick={() => toggleItems(order.order_no)}>
+                    <button className="viewOrdersButton" onClick={() => toggleItems(order.order_no)}style={{ backgroundColor: paidPaypal[order.order_no] ? 'green' : '#BA9D55', color: paidPaypal[order.order_no] ? 'white' : 'black' }}>
                       {expandedOrders[order.order_no]
                         ? "HIDE ITEMS"
                         : "VIEW ITEMS IN THIS ORDER"
@@ -112,18 +154,20 @@ function HeadOfKitchen() {
                 </tr>
                 {expandedOrders[order.order_no] && (
                   <tr>
-                    <td colSpan={3}>
+                    <td colSpan={3} style={{ color: paidPaypal[order.order_no] ? 'green' : 'black'}}>
                       <ul>
-                        {itemsByOrder[order.order_no]?.map((item, idx) => (
-                          <li className="item" key={idx}>
-                            {item.order_name} - Qty: {item.quantity} Price: ${item.price * item.quantity}
-                          </li>
-                        )) || <li>Loading...</li>}
-                      </ul>
-                        Total: $
                         {
-                          itemsByOrder[order.order_no]
-                          ?.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+                          itemsByOrder[order.order_no]?.map((item, idx) => (
+                            <li className="item" key={idx} style={{ color: paidPaypal[order.order_no] ? 'green' : 'black'}}>
+                              {item.order_name} - Qty: {item.quantity} Price: ${item.price * item.quantity}
+                            </li>
+                          )) || <li>Loading...</li>
+                        }
+                      </ul>
+                        {
+                          paidPaypal[order.order_no] 
+                          ? `$${itemsByOrder[order.order_no]?.reduce((acc, item) => acc + (item.price * item.quantity), 0)} PAID WITH PAYPAL` 
+                          : `Total: $${itemsByOrder[order.order_no]?.reduce((acc, item) => acc + (item.price * item.quantity), 0)}`
                         }
                     </td>
                   </tr>

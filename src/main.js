@@ -8,20 +8,19 @@ import { useEffect } from 'react';
 //IMPORTANT: YOU MUST CALCULATE THE ORDER TOTAL ON THE POP-UP FOR THOSE PAYING IN CASH
 //THE ORDERS DATABASE MUST SHOW THE TOTAL...IT WILL CALCULATE THE ITEM PRICE * QUANTITY
 function Main(){
-    /*const [showRank, setShowRank] = useState(false);
-    const rank =["Officer20","Officer10","Soldier","Sister"]
-    */
-   
     //THE FOLLOWING useState INPUTS THE USER INFORMATION INSIDE SUPABASE//
-    const [rank, setRank] = useState('Officer 80')//
+    const [rank, setRank] = useState('SELECT MEMBER STATUS')//
     const [name, setName] = useState('')
     const [orders, setOrders] = useState([]) //gets all the orders
 
     const [showPopup, setShowPopup] = useState(false)
     const [submittedOrderNo, setSubmittedOrderNo] = useState(null)//handles fetching the submitted order numbers
-    const [viewAllOrders, setViewAllOrders] = useState();
+    //const [viewAllOrders, setViewAllOrders] = useState();
     //THE FOLLOWING useState ENSURES AT LEAST ONE ITEM HAS A QUANTITY GREATER THAN 0
     const [orderSelections, setOrderSelections] = useState({})
+
+    //STOP SUBMISSION OF ORDERS
+    const [stopOrders, setStopOrders] = useState(false);
 
     useEffect(() =>{
         if(showPopup){
@@ -57,6 +56,12 @@ function Main(){
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        //const statusCheck = document.querySelector('#genderRank')
+        if(rank === "SELECT MEMBER STATUS"){
+            console.log('Please select member status')
+            alert('Please select member status')
+            return
+        }
         //THE FOLLOWING CODE ENSURES AT LEAST ONE ITEM HAS A QUANTITY GREATER THAN 0
         const atleastOneSelection = Object.values(orderSelections).some(
             item => parseInt(item.quantity) > 0
@@ -65,7 +70,8 @@ function Main(){
             alert("Please select at least one item to order");
             return;
         }
-
+        //DISABLE THE ORDER BUTTON TO PREVENT MULTIPE ERRONEOUS ORDERS
+        setStopOrders(true)
         try{
             //insert the customer to DB
             const { data: customerData, error: customerError } = await supabase
@@ -109,6 +115,7 @@ function Main(){
         } catch(err){
             console.error('Database Error from Supabase: ', err)
         }
+        
         //display the display order button
         const showOrderNoButton = document.querySelector('.showOrderNoButton')
         showOrderNoButton.style.position="absolute"
@@ -132,8 +139,9 @@ function Main(){
             <br />
             {/*START OF FORM*/}
             <form id='userForm' onSubmit={handleSubmit}>
-                <label htmlFor="genderRank">Rank (or select Sister):</label><br/>
-                <select id="genderRank" name="genderRank" value={rank} onChange={(e) => setRank(e.target.value)}>
+                {/*<label htmlFor="genderRank"><strong>Rank (or select Sister):</strong></label><br />*/}
+                <select required id="genderRank" name="genderRank" value={rank} onChange={(e) => setRank(e.target.value)}>
+                    <option value="null">SELECT MEMBER STATUS</option>
                     <option value="Officer 80">Officer 80</option>
                     <option value="Officer 50">Officer 50</option>
                     <option value="Officer 20">Officer 20</option>
@@ -144,16 +152,16 @@ function Main(){
                 </select>
                 <br/>
                 <br/>
-                {/*evaluate the input tag*/}
-                <label htmlFor="name">Enter your full name:</label><br/>
+                {/*evaluate the input tag 
+                <label htmlFor="name"><strong>Enter your full name:</strong></label> 
+                */}
                 <input
                     required
                     type ="text" 
-                    placeholder='First and last name'
+                    placeholder='Enter first and last name'
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
-                
                 <br/>
                 {/*Meals*/}
                 <h4>Select Your Meal&#40;s&#41;</h4>
@@ -198,7 +206,7 @@ function Main(){
                         onChange={handleOrderChange}
                     />
                 </div>
-                <input type="submit" value="Place Order" />
+                <input className='submitOrderButton' type="submit" value="Place Order" disabled={stopOrders}/>
             </form>
             <br />
             <br />
