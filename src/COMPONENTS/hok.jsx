@@ -76,7 +76,7 @@ function HeadOfKitchen() {
             .from('order')
             .select('*')
             .eq('order_no' , orderNo)
-            .not('paid_with_paypal' , 'is', null)
+            .not('paid_with_paypal' , 'is', false)
  
           if(error){
             console.log('Cannot verify PayPal payment for ${orderNo} ', error.message)
@@ -87,34 +87,6 @@ function HeadOfKitchen() {
         setExpandedOrders((prev) => ({...prev, [orderNo]: true}));
       }
     };
-    //CHECKS IF PAID WITH PAYPAL
-    /*
-    const payPalRow = ({order}) =>{
-      const seeIfPaid = async (orderNo) =>{
-        if(!paidPaypal[orderNo]){
-          const { data,error } = await supabase
-          .from('order')
-          .select('*')
-          .eq('order_no' , orderNo)
-          .not('paid_with_paypal' , 'is', null)
-
-          if(error){
-            console.log("Cannot verify PayPal payment: ", error.message)
-          }
-          if(data && data.length > 0){
-            setPaidPaypal((prev) => ({...prev, [orderNo]: true}))
-          }else{
-            setPaidPaypal((prev) => ({...prev, [orderNo]: false}))
-          }
-        }
-      };
-      useEffect(() =>{
-        if(order?.order_no){
-          seeIfPaid(order.order_no)
-        }
-      },[order?.order_no])
-    }
-    */
   return(
     <>
       <img className='hoklogo' src='/IMAGES/BattleAxeCafeLogo.png'></img>

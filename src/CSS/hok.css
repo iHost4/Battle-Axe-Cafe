@@ -33,7 +33,7 @@ h3{
 }
 .viewOrdersButton{
     border: 1px solid rgba(0, 0, 255, 0);
-    background-color: #BA9D55;
+    /*background-color: #BA9D55;*/
 }
 .item{
     list-style: none;

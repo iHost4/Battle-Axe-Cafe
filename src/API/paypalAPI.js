@@ -34,7 +34,7 @@ const PayPalCheckout = ({orderNo}) => {
         const handlePayPalSuccess = async () => {
             try{
                 const { error: orderError } = await supabase
-                .from('"order"')
+                .from("order")
                 .update({ paid_with_paypal: true })
                 .eq("order_no",orderNo)
                 
